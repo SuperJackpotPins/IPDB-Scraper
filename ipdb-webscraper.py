@@ -5,6 +5,7 @@ import webbrowser
 import os
 import signal
 import sys
+import argparse
 
 # Base URL for the search results
 base_url = "https://www.ipdb.org"
@@ -78,7 +79,7 @@ def format_elapsed_time(seconds):
     return f"{minutes} mins {seconds} secs"
 
 # Main function to loop through search results and images
-def main():
+def main(num_machines):
     global stop_script, start_time
 
     # Start the timer
@@ -107,9 +108,10 @@ def main():
     else:
         print("Starting from the beginning.")
 
-    # Process the machine links
+    # Process the specified number of machines
+    processed_count = 0
     for machine_link in machine_links:
-        if stop_script:
+        if stop_script or processed_count >= num_machines:
             break
 
         print(f"Processing machine: {machine_link}")
@@ -137,15 +139,27 @@ def main():
         save_progress(machine_id, format_elapsed_time(elapsed_time))
 
         print("Finished processing images for this machine.")
+        processed_count += 1
 
     if stop_script:
         print("Script stopped by user. Progress saved.")
     else:
-        print("Finished processing all machines.")
+        print(f"Finished processing {processed_count} machines.")
 
     # Print total elapsed time
     elapsed_time = time.time() - start_time
     print(f"Total elapsed time: {format_elapsed_time(elapsed_time)}")
 
 if __name__ == "__main__":
-    main()
+    # Set up argument parsing
+    parser = argparse.ArgumentParser(description="Process a specified number of pinball machine results.")
+    parser.add_argument(
+        "--num_machines",
+        type=int,
+        required=True,
+        help="Number of machine results to process."
+    )
+    args = parser.parse_args()
+
+    # Run the main function with the specified number of machines
+    main(args.num_machines)
