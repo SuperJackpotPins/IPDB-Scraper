@@ -15,14 +15,14 @@ Run the script with the --num_machines argument:
 
 bash
 Copy
-python scraper.py --num_machines 10
+python ipdb-webscraper.py --num_machines 10
 This will process 10 machines and then stop.
 
 To resume later, run the script again with a new --num_machines value:
 
 bash
 Copy
-python scraper.py --num_machines 15
+python ipdb-webscraper.py --num_machines 15
 The script will resume from the last processed machine and process 15 more machines.
 
 To stop the script manually, press Ctrl+C. The progress will be saved to progress.txt.
